@@ -1,0 +1,28 @@
+{
+  "name": "perimeter-service",
+  "version": "1.0.0",
+  "description": "service for perimeter app",
+  "main": "index.js",
+  "scripts": {
+    "start": "assume-role dish sls offline --httpPort 3001 -r us-east-1 -s dev --acct dev",
+    "test": "npm run test",
+    "deploy:dev": "sls deploy -v -r us-east-1 -s dev --acct dev",
+    "deploy:prod": "sls deploy -v -r us-east-1 -s prd --acct prod"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-lambda": "^3.13.0",
+    "graphql": "^16.9.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "better-npm-run": "^0.1.1",
+    "prettier": "^3.3.3",
+    "serverless": "^3.39.0",
+    "serverless-offline": "^13.6.0",
+    "serverless-webpack": "^5.14.1",
+    "webpack": "^5.93.0",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
