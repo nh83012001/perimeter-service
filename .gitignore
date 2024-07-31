@@ -1,0 +1,8 @@
+node_modules/
+.serverless/
+.webpack/
+.nyc_output
+coverage/
+.DS_Store
+.vscode/
+/environments
