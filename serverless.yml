@@ -1,0 +1,115 @@
+service: perimeter-service
+
+provider:
+  name: aws
+  lambdaHashingVersion: 20201221
+  apiGateway:
+    shouldStartNameWithService: true
+  runtime: nodejs18.x
+  profile: ${self:custom.accounts.${opt:acct}.profile}
+  environment:
+    ACCOUNT_NAME: ${opt:acct}
+    DEBUG: ${self:custom.accounts.${opt:acct}.debug}
+    BUCKET_NAME: ${self:service}-${opt:stage}-bucket
+    SERVERLESS_PROJECT: ${self:service}
+    SERVERLESS_STAGE: ${opt:stage}
+    SERVERLESS_REGION: ${opt:region}
+    SINGLE_TABLE_NAME: ${self:service}-${opt:stage}-table
+    SINGLE_TABLE_SK_DATA_INDEX: SkDataIndex
+    SINGLE_TABLE_DATATYPE_SK_INDEX: DataTypeSKIndex
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:BatchWriteItem
+        - dynamodb:DeleteItem
+      Resource:
+        - Fn::GetAtt: [EntitiesTable, Arn]
+        - Fn::Join:
+            - '/'
+            - - Fn::GetAtt: [EntitiesTable, Arn]
+              - index
+              - ${self:provider.environment.SINGLE_TABLE_SK_DATA_INDEX}
+        - Fn::Join:
+            - '/'
+            - - Fn::GetAtt: [EntitiesTable, Arn]
+              - index
+              - ${self:provider.environment.SINGLE_TABLE_DATATYPE_SK_INDEX}
+
+  usagePlan:
+    quota:
+      limit: 5000
+      offset: 0
+      period: DAY
+    throttle:
+      burstLimit: 100
+      rateLimit: 100
+package:
+  individually: true
+custom:
+  webpack:
+    includeModules: true
+  accounts:
+    dev:
+      accountNumber: 747164698676
+      debug: '*'
+      profile: dish
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+functions:
+  graphql:
+    handler: src/graphql/index.handle
+    name: ${self:service}-${opt:stage}-graphql
+    memorySize: 512
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:provider.environment.USER_POOL}
+
+resources:
+  Resources:
+    EntitiesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.SINGLE_TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+          - AttributeName: data
+            AttributeType: S
+          - AttributeName: dataType
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.SINGLE_TABLE_SK_DATA_INDEX}
+            KeySchema:
+              - AttributeName: sk
+                KeyType: HASH
+              - AttributeName: data
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: ${self:provider.environment.SINGLE_TABLE_DATATYPE_SK_INDEX}
+            KeySchema:
+              - AttributeName: dataType
+                KeyType: HASH
+              - AttributeName: sk
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
