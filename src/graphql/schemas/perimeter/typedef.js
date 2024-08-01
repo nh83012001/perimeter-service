@@ -39,9 +39,13 @@ const typedef = `
     polygonId: String!
   }
 
+  input GetMapSessionInput {
+    sessionId: String!
+  }
+
 
   extend type Query {
-    getMapSession(input: String!): MapSession
+    getMapSession(input: GetMapSessionInput!): MapSession
   }
 
   extend type Mutation {

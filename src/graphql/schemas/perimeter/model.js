@@ -3,7 +3,8 @@ class Perimeter {
     this.dynamoConnector = dynamoConnector;
   }
 
-  async getMapSession(sessionId) {
+  async getMapSession(input) {
+    const { sessionId } = input;
     await this.dynamoConnector.query({
       partitionKeyName: 'pk',
       partitionKeyValue: `SESSION#${sessionId}`,
