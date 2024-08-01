@@ -28,8 +28,12 @@ class Perimeter {
       name: input.name,
       coordinates: input.coordinates,
     };
-    this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);
-    return 'success';
+    try {
+      await this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);
+      return 'successful create of a polygon';
+    } catch (error) {
+      return 'error creating polygon';
+    }
   }
 
   async editPolygon(input) {
@@ -39,8 +43,12 @@ class Perimeter {
       name: input.name,
       coordinates: input.coordinates,
     };
-    this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);
-    return 'success';
+    try {
+      await this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);
+      return 'successful edit of a polygon';
+    } catch (error) {
+      return 'error editing polygon';
+    }
   }
 
   async deletePolygon(input) {
@@ -48,8 +56,12 @@ class Perimeter {
       pk: `SESSION#${input.sessionId}`,
       sk: `POLYGON#${input.polygonId}`,
     };
-    this.dynamoConnector.deleteRecord(['pk', 'sk'], transformedInput);
-    return 'success';
+    try {
+      await this.dynamoConnector.deleteRecord(['pk', 'sk'], transformedInput);
+      return 'successful delete';
+    } catch (error) {
+      return 'error deleting polygon';
+    }
   }
 }
 
