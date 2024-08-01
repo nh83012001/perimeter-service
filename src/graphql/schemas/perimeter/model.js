@@ -5,11 +5,10 @@ class Perimeter {
 
   async getMapSession(input) {
     const { sessionId } = input;
-    await this.dynamoConnector.query({
+    const response = await this.dynamoConnector.query({
       partitionKeyName: 'pk',
       partitionKeyValue: `SESSION#${sessionId}`,
     });
-
     const polygons = response.Items.filter((item) =>
       item.sk.startsWith('POLYGON')
     );
