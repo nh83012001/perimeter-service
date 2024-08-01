@@ -25,6 +25,7 @@ class Perimeter {
     const transformedInput = {
       pk: `SESSION#${input.sessionId}`,
       sk: `POLYGON#${input.polygonId}`,
+      polygonId: input.polygonId,
       name: input.name,
       coordinates: input.coordinates,
     };
@@ -40,6 +41,7 @@ class Perimeter {
     const transformedInput = {
       pk: `SESSION#${input.sessionId}`,
       sk: `POLYGON#${input.polygonId}`,
+      polygonId: input.polygonId,
       name: input.name,
       coordinates: input.coordinates,
     };
