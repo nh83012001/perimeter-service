@@ -6,8 +6,7 @@
   "scripts": {
     "start": "assume-role dish sls offline --httpPort 3001 -r us-east-1 -s dev --acct dev",
     "test": "npm run test",
-    "deploy:dev": "sls deploy -v -r us-east-1 -s dev --acct dev",
-    "deploy:prod": "sls deploy -v -r us-east-1 -s prd --acct prod"
+    "deploy:dev": "sls deploy -v -r us-east-1 -s dev --acct dev"
   },
   "author": "",
   "license": "ISC",
@@ -17,12 +16,24 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "@babel/register": "^7.24.6",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^9.1.3",
+    "babel-plugin-istanbul": "^7.0.0",
     "better-npm-run": "^0.1.1",
+    "cz-conventional-changelog": "^3.3.0",
     "prettier": "^3.3.3",
     "serverless": "^3.39.0",
     "serverless-offline": "^13.6.0",
     "serverless-webpack": "^5.14.1",
     "webpack": "^5.93.0",
     "webpack-node-externals": "^3.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
