@@ -13,39 +13,11 @@ class Perimeter {
       item.sk.startsWith('POLYGON')
     );
 
-    const settings = response.Items.find((item) => item.sk === 'SETTINGS');
-
     const transformedResponse = {
       sessionId,
       polygons,
-      zoom: settings?.zoom,
-      center: settings?.center,
     };
     return transformedResponse;
-  }
-
-  async createSessionSettings(input) {
-    const transformedInput = {
-      pk: `SESSION#${input.sessionId}`,
-      sk: `SETTINGS`,
-      zoom: input.zoom,
-      center: input.center,
-    };
-
-    this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);
-    return 'success';
-  }
-
-  async editSessionSettings(input) {
-    const transformedInput = {
-      pk: `SESSION#${input.sessionId}`,
-      sk: `SETTINGS`,
-      zoom: input.zoom,
-      center: input.center,
-    };
-
-    this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);
-    return 'success';
   }
 
   // TODO should I put the all the coordinates into a data column?

@@ -6,12 +6,6 @@ const resolvers = {
     },
   },
   Mutation: {
-    createSession(_, { input }, ctx) {
-      return ctx.models.Perimeter.createSession(input);
-    },
-    editSession(_, { input }, ctx) {
-      return ctx.models.Perimeter.editSession(input);
-    },
     createPolygon(_, { input }, ctx) {
       return ctx.models.Perimeter.createPolygon(input);
     },

@@ -2,8 +2,6 @@ const typedef = `
 
   type MapSession {
     sessionId: String!
-    zoom: Float
-    center: [Float]
     polygons: [Polygon]
   }
 
@@ -59,8 +57,6 @@ const typedef = `
   }
 
   extend type Mutation {
-    createSessionSettings(input: CreateSession!): String
-    editSessionSettings(input: EditSessionSettingsInput!): String
     createPolygon(input: CreatePolygonInput!): String
     editPolygon(input: EditPolygonInput!): String
     deletePolygon(input: DeletePolygonInput!): String
