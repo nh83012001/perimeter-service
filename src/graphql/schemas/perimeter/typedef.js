@@ -7,31 +7,22 @@ const typedef = `
 
   type Polygon {
     polygonId: String!
-    type: String!
-    properties: Properties!
-    geometry: Geometry!
-  }
-
-  type Properties {
-    name: String!
-  }
-
-  type Geometry {
-    coordinates: [[[Float]]]!
-    type: String!
+    name: String
+    coordinates: [[Float]]
   }
 
   input EditPolygonInput {
-    id: String!
+    sessionId: String!
+    polyonId: String!
     name: String
-    coordinates: [[[Float]]]
+    coordinates: [[Float]]
   }
   
   input CreatePolygonInput {
     sessionId: String!
     polygonId: String! 
     name: String
-    coordinates: [[[Float]]]
+    coordinates: [[Float]]
   }
 
   input DeletePolygonInput {
