@@ -34,18 +34,6 @@ const typedef = `
     coordinates: [[[Float]]]
   }
 
-  input CreateSessionInput {
-    sessionId: String!
-    zoom: Float
-    center: [Float]  
-  }
-
-  input EditSessionInput {
-    sessionId: String!
-    zoom: Float
-    center: [Float]
-  }
-
   input DeletePolygonInput {
     sessionId: String!
     polygonId: String!
