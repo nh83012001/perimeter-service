@@ -212,33 +212,30 @@ export default class DynamoConnector {
       acc[curValue] = input[curValue];
       return acc;
     }, {});
-    return this.update(keyValues, omit(input, keys)); // omits sk/pk key values
+    const bodyValues = omit(input, keys);
+    return this.update(keyValues, bodyValues); // returns the promise from update
   }
 
-  update(keyValues, bodyValues) {
-    const params = {
-      TableName: this.tableName,
-      Key: keyValues,
-      UpdateExpression: `SET ${Object.keys(bodyValues)
-        .map((attrName) => `#${attrName} = :${attrName}`)
-        .join(', ')}`,
-      ExpressionAttributeNames: Object.keys(bodyValues)
-        .map((attrName) => ({ [`#${attrName}`]: attrName }))
-        .reduce(merge, {}),
-      ExpressionAttributeValues: Object.keys(bodyValues)
-        .map((attrName) => ({ [`:${attrName}`]: bodyValues[attrName] }))
-        .reduce(merge, {}),
-      ReturnValues: 'ALL_NEW',
-    };
-    return this.docClient
-      .update(params)
-      .promise()
-      .then((item) => {
-        return item.Attributes;
-      })
-      .catch((err) => {
-        return Promise.reject(err);
-      });
+  async update(keyValues, bodyValues) {
+    try {
+      const params = {
+        TableName: this.tableName,
+        Key: keyValues,
+        UpdateExpression: 'SET #attr1 = :val1',
+        ExpressionAttributeNames: {
+          '#attr1': Object.keys(bodyValues)[0],
+        },
+        ExpressionAttributeValues: {
+          ':val1': Object.values(bodyValues)[0],
+        },
+        ReturnValues: 'ALL_NEW',
+      };
+      const item = await this.docClient.update(params).promise();
+      return item.Attributes;
+    } catch (err) {
+      console.log('Error updating item', err);
+      return Promise.reject(err);
+    }
   }
 
   deleteRecord(keyValues) {
