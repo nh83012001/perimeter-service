@@ -6,12 +6,10 @@ const resolvers = {
     },
   },
   Mutation: {
-    createPolygon(_, { input }, ctx) {
-      return ctx.models.Perimeter.createPolygon(input);
+    createOrUpdatePolygon(_, { input }, ctx) {
+      return ctx.models.Perimeter.createOrUpdatePolygon(input);
     },
-    editPolygon(_, { input }, ctx) {
-      return ctx.models.Perimeter.editPolygon(input);
-    },
+
     deletePolygon(_, { input }, ctx) {
       return ctx.models.Perimeter.deletePolygon(input);
     },

@@ -10,15 +10,8 @@ const typedef = `
     name: String
     coordinates: [[Float]]
   }
-
-  input EditPolygonInput {
-    sessionId: String!
-    polyonId: String!
-    name: String
-    coordinates: [[Float]]
-  }
   
-  input CreatePolygonInput {
+  input CreateOrUpdatePolygonInput {
     sessionId: String!
     polygonId: String! 
     name: String
@@ -40,8 +33,7 @@ const typedef = `
   }
 
   extend type Mutation {
-    createPolygon(input: CreatePolygonInput!): String
-    editPolygon(input: EditPolygonInput!): String
+    createOrUpdatePolygon(input: CreateOrUpdatePolygonInput!): String
     deletePolygon(input: DeletePolygonInput!): String
   }
 `;

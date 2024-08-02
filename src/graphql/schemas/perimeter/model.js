@@ -20,8 +20,7 @@ class Perimeter {
     return transformedResponse;
   }
 
-  // TODO should I put the all the coordinates into a data column?
-  async createPolygon(input) {
+  async createOrUpdatePolygon(input) {
     const transformedInput = {
       pk: `SESSION#${input.sessionId}`,
       sk: `POLYGON#${input.polygonId}`,
@@ -31,25 +30,9 @@ class Perimeter {
     };
     try {
       await this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);
-      return 'successful create of a polygon';
+      return 'successful create or update of a polygon';
     } catch (error) {
-      return 'error creating polygon';
-    }
-  }
-
-  async editPolygon(input) {
-    const transformedInput = {
-      pk: `SESSION#${input.sessionId}`,
-      sk: `POLYGON#${input.polygonId}`,
-      polygonId: input.polygonId,
-      name: input.name,
-      coordinates: input.coordinates,
-    };
-    try {
-      await this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);
-      return 'successful edit of a polygon';
-    } catch (error) {
-      return 'error editing polygon';
+      return 'error creating or updating polygon';
     }
   }
 
