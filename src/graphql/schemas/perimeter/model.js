@@ -1,3 +1,4 @@
+import { isValidPolygon } from '../../../utils';
 class Perimeter {
   constructor(dynamoConnector) {
     this.dynamoConnector = dynamoConnector;
@@ -28,6 +29,10 @@ class Perimeter {
       name: input.name,
       coordinates: input.coordinates,
     };
+    const res = isValidPolygon(input.coordinates);
+    if (res !== true) {
+      return res; // return error messages
+    }
     try {
       await this.dynamoConnector.saveAsUpdate(['pk', 'sk'], transformedInput);
       return 'successful create or update of a polygon';
