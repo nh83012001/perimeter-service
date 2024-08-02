@@ -1,54 +1,28 @@
 export function isValidPolygon(coordinates) {
-  let parsed;
-  let errorList = [];
-
-  // Step 1: Check if coordinates can be parsed
-  const parseResult = canParseJSON(coordinates);
-  if (parseResult !== true) {
-    errorList.push(parseResult);
-    return errorList.join('\n'); // don't move on if you can't parse json
-  }
-
-  parsed = JSON.parse(coordinates);
-
-  // Step 2: Check if parsed data is an array
-  const arrayResult = isArray(parsed);
+  // Step 1: Check if the input data is an array
+  const arrayResult = isArray(coordinates);
   if (arrayResult !== true) {
-    errorList.push(arrayResult);
-    return errorList.join('\n'); // don't move on if not an array
+    return arrayResult;
   }
 
-  // Step 3: Check if each coordinate pair is valid
-  const coordsResult = areValidCoordinates(parsed);
+  // Step 2: Check if each coordinate pair is valid
+  const coordsResult = areValidCoordinates(coordinates);
   if (coordsResult !== true) {
-    errorList.push(coordsResult);
-    return errorList.join('\n'); // don't move on if coordinates aren't numbers
+    return coordsResult;
   }
 
-  // Step 4: Check if the polygon is closed
-  const closedResult = isClosedPolygon(parsed);
+  // Step 3: Check if the polygon is closed
+  const closedResult = isClosedPolygon(coordinates);
   if (closedResult !== true) {
-    errorList.push(closedResult);
+    return closedResult;
   }
-  if (errorList.length === 0) {
-    return true;
-  } else {
-    return errorList.join('\n');
-  }
-}
 
-function canParseJSON(json) {
-  try {
-    JSON.parse(json);
-    return true;
-  } catch (e) {
-    return 'ERROR: Invalid JSON format.';
-  }
+  return true;
 }
 
 function isArray(parsed) {
   if (!Array.isArray(parsed)) {
-    return 'ERROR: Parsed JSON is not an array.';
+    return 'ERROR: Input is not an array.';
   }
   return true;
 }
@@ -61,6 +35,9 @@ function areValidCoordinates(parsed) {
     }
     if (typeof coord[0] !== 'number' || typeof coord[1] !== 'number') {
       return `ERROR: Coordinates at index ${i} must be numbers.`;
+    }
+    if (parsed.length < 3) {
+      return 'ERROR: A valid polygon must have at least three coordinate arrays.';
     }
   }
   return true;

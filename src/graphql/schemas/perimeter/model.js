@@ -1,4 +1,4 @@
-import { isValidPolygon } from '../../../utils';
+const { isValidPolygon } = require('../../../utils/index');
 class Perimeter {
   constructor(dynamoConnector) {
     this.dynamoConnector = dynamoConnector;
