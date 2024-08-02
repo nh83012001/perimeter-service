@@ -238,11 +238,19 @@ export default class DynamoConnector {
     }
   }
 
-  deleteRecord(keyValues) {
+  async deleteRecord(bodyValues) {
     const params = {
       TableName: this.tableName,
-      Key: keyValues,
+      Key: {
+        pk: bodyValues.pk,
+        sk: bodyValues.sk,
+      },
     };
-    return this.docClient.delete(params).promise();
+    try {
+      await this.docClient.delete(params).promise();
+    } catch (err) {
+      console.log('Error updating item', err);
+      return Promise.reject(err);
+    }
   }
 }

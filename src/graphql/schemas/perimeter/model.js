@@ -59,7 +59,7 @@ class Perimeter {
       sk: `POLYGON#${input.polygonId}`,
     };
     try {
-      await this.dynamoConnector.deleteRecord(['pk', 'sk'], transformedInput);
+      await this.dynamoConnector.deleteRecord(transformedInput);
       return 'successful delete';
     } catch (error) {
       return 'error deleting polygon';
