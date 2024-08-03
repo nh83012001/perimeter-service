@@ -213,23 +213,33 @@ export default class DynamoConnector {
       return acc;
     }, {});
     const bodyValues = omit(input, keys);
+
     return this.update(keyValues, bodyValues); // returns the promise from update
   }
 
   async update(keyValues, bodyValues) {
+    const UpdateExpression = [];
+    const ExpressionAttributeNames = {};
+    const ExpressionAttributeValues = {};
+
+    Object.keys(bodyValues).forEach((key, index) => {
+      const attrName = `#attr${index}`;
+      const attrValue = `:val${index}`;
+      UpdateExpression.push(`${attrName} = ${attrValue}`);
+      ExpressionAttributeNames[attrName] = key;
+      ExpressionAttributeValues[attrValue] = bodyValues[key];
+    });
+
+    const params = {
+      TableName: this.tableName,
+      Key: keyValues,
+      UpdateExpression: `SET ${UpdateExpression.join(', ')}`,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues,
+      ReturnValues: 'ALL_NEW',
+    };
+
     try {
-      const params = {
-        TableName: this.tableName,
-        Key: keyValues,
-        UpdateExpression: 'SET #attr1 = :val1',
-        ExpressionAttributeNames: {
-          '#attr1': Object.keys(bodyValues)[0],
-        },
-        ExpressionAttributeValues: {
-          ':val1': Object.values(bodyValues)[0],
-        },
-        ReturnValues: 'ALL_NEW',
-      };
       const item = await this.docClient.update(params).promise();
       return item.Attributes;
     } catch (err) {
@@ -248,6 +258,7 @@ export default class DynamoConnector {
     };
     try {
       await this.docClient.delete(params).promise();
+      return 'success';
     } catch (err) {
       console.log('Error updating item', err);
       return Promise.reject(err);
