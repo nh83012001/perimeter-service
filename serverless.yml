@@ -1,4 +1,4 @@
-service: perimeter-service
+service: perimeter-services
 
 provider:
   name: aws
@@ -60,7 +60,6 @@ custom:
 
 plugins:
   - serverless-webpack
-  - serverless-offline
 
 functions:
   graphql:
@@ -72,8 +71,6 @@ functions:
           path: graphql
           method: post
           cors: true
-          authorizer:
-            arn: ${self:provider.environment.USER_POOL}
 
 resources:
   Resources:
