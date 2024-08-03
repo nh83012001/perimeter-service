@@ -55,7 +55,7 @@ This API is designed to manage and manipulate polygons on a map, providing funct
 
 ### Running the Server
 
-Start the Apollo Server:
+Start the server with serverless offline (if you have aws credentials setup)
 
 ```bash
 npm start
