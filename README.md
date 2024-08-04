@@ -69,9 +69,9 @@ Deploy to AWS:
 npm run deploy:dev
 ```
 
-**Deployment URL:**
-
-https://qsb51itvz4.execute-api.us-east-1.amazonaws.com/dev
+**Deployment URL:** - [API endpoint](https://qsb51itvz4.execute-api.us-east-1.amazonaws.com/dev)
+**Frontend Repo** - [Frontend](https://github.com/nh83012001/perimeter-app/)
+**Frontend URL** - [Perimeter App](https://dgkpkp27prv85.cloudfront.net/)
 
 ### GraphQL API
 
@@ -192,3 +192,6 @@ events:
       authorizer:
         arn: ${self:provider.environment.USER_POOL}
 ```
+
+- **Add Sentry/Error logging**: I hate AWS for error logging and generally use Sentry
+- **Add CI/CD**: Add circle CI and test rules
